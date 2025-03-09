@@ -36,7 +36,7 @@ class ClubActivity(models.Model):
     total_cost = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     transportation_request = models.BooleanField(default=False)
     supporting_documents = models.FileField(upload_to='activity_docs/', blank=True, null=True)
-    created_by = models.ForeignKey('users.User', on_delete=models.CASCADE)  # Updated for AUTH_USER_MODEL
+    created_by = models.ForeignKey('users.User', on_delete=models.CASCADE, null=True, blank=True)  # Updated for AUTH_USER_MODEL
     approval_status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')  # ✅ Ensure this exists
 
     def __str__(self):

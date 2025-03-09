@@ -1,33 +1,103 @@
+{% extends "dashboard.html" %}
 {% load static %}
+{% block content %}
+<style>
+  .activity-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .activity-table th {
+    background-color: #3B82F6;
+    color: #ffffff;
+    padding: 10px;
+    text-align: left;
+  }
+  
+  .activity-table td {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .action-btn {
+    display: inline-block;
+    text-decoration: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 14px;
+    margin-right: 5px;
+  }
+  
+  .approve-btn {
+    background-color: #34D399;
+  }
+  .approve-btn:hover {
+    background-color: #059669;
+  }
+  
+  .reject-btn {
+    background-color: #EF4444;
+  }
+  .reject-btn:hover {
+    background-color: #DC2626;
+  }
+  
+  .schedule-btn {
+    background-color: #FBBF24;
+  }
+  .schedule-btn:hover {
+    background-color: #F59E0B;
+  }
+  
+  .activity-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1em;
+  }
+  
+  .activity-header h2 {
+    margin: 0;
+  }
+  
+  .activity-header nav a {
+    text-decoration: none;
+    color: #3B82F6;
+    font-size: 14px;
+  }
+</style>
 
+<div class="activity-header">
+  <h2>Club Activities</h2>
+</div>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Review Club Activities</title>
-  <link rel="stylesheet" href="{% static 'css/admin.css' %}">
-</head>
-<body>
-  <header>
-    <h1>Club Activities</h1>
-    <nav>
-      <a href="{% url 'activity_center_admin:dashboard' %}">Dashboard</a>
-    </nav>
-  </header>
-  <main>
-    <ul>
-      {% for activity in activities %}
-        <li>
-          {{ activity.title }} - {{ activity.club.name }} (Status: {{ activity.status }})
-          <a href="{% url 'activity_center_admin:activity_approve' activity.id %}">Approve</a> |
-          <a href="{% url 'activity_center_admin:activity_reject' activity.id %}">Reject</a> |
-          <a href="{% url 'activity_center_admin:schedule_meeting' activity.id %}">Schedule Meeting</a>
-        </li>
-      {% empty %}
-        <li>No activities available.</li>
-      {% endfor %}
-    </ul>
-  </main>
-</body>
-</html>
+<table class="activity-table">
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Club</th>
+      <th>Status</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for activity in activities %}
+      <tr>
+        <td>{{ activity.title }}</td>
+        <td>{{ activity.club.name }}</td>
+        <td>{{ activity.status }}</td>
+        <td>
+          <a href="{% url 'activity_center_admin:activity_approve' activity.id %}" class="action-btn approve-btn">Approve</a>
+          <a href="{% url 'activity_center_admin:activity_reject' activity.id %}" class="action-btn reject-btn">Reject</a>
+          <a href="{% url 'activity_center_admin:schedule_meeting' activity.id %}" class="action-btn schedule-btn">Schedule Meeting</a>
+        </td>
+      </tr>
+    {% empty %}
+      <tr>
+        <td colspan="4" style="text-align: center; padding: 8px;">No activities available.</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock content %}

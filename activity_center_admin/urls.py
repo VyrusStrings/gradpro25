@@ -12,6 +12,7 @@ urlpatterns = [
     path('clubs/create/', views.ClubCreateView.as_view(), name='club_create'),
     path('clubs/<int:pk>/update/', views.ClubUpdateView.as_view(), name='club_update'),
     path('clubs/<int:pk>/delete/', views.ClubDeleteView.as_view(), name='club_delete'),
+    path('clubs/<int:club_id>/view/', views.club_view, name='club_view'),
     
     # Events CRUD
     path('events/', views.EventListView.as_view(), name='event_list'),

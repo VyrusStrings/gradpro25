@@ -1,32 +1,73 @@
+{% extends "dashboard.html" %}
 {% load static %}
+{% block content %}
+<style>
+  .announcement-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
 
+  .announcement-table th {
+    background-color: #3B82F6;
+    color: #ffffff;
+    padding: 10px;
+    text-align: left;
+  }
+  .announcement-table td {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+  }
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Review Announcements</title>
-  <link rel="stylesheet" href="{% static 'css/admin.css' %}">
-</head>
-<body>
-  <header>
-    <h1>Announcements</h1>
-    <nav>
-      <a href="{% url 'activity_center_admin:dashboard' %}">Dashboard</a>
-    </nav>
-  </header>
-  <main>
-    <ul>
-      {% for announcement in announcements %}
-        <li>
-          {{ announcement.title }} - {{ announcement.club.name }} (Status: {{ announcement.status }})
-          <a href="{% url 'activity_center_admin:announcement_approve' announcement.id %}">Approve</a> |
-          <a href="{% url 'activity_center_admin:announcement_reject' announcement.id %}">Reject</a>
-        </li>
-      {% empty %}
-        <li>No announcements available.</li>
-      {% endfor %}
-    </ul>
-  </main>
-</body>
-</html>
+  .announcement-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1em;
+  }
+  
+  .announcement-header h2 {
+    margin: 0;
+  }
+  
+  .announcement-header nav a {
+    text-decoration: none;
+    color: #3B82F6;
+    font-size: 14px;
+  }
+</style>
+
+<div class="announcement-header">
+  <h2>Review Announcements</h2>
+  <nav>
+    <a href="{% url 'activity_center_admin:dashboard' %}">Dashboard</a>
+  </nav>
+</div>
+
+<table class="announcement-table">
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Club</th>
+      <th>Status</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for announcement in announcements %}
+      <tr>
+        <td>{{ announcement.title }}</td>
+        <td>{{ announcement.club.name }}</td>
+        <td>{{ announcement.status }}</td>
+        <td>
+          <a href="{% url 'activity_center_admin:announcement_approve' announcement.id %}" class="action-btn approve-btn">Approve</a>
+          <a href="{% url 'activity_center_admin:announcement_reject' announcement.id %}" class="action-btn reject-btn">Reject</a>
+        </td>
+      </tr>
+    {% empty %}
+      <tr>
+        <td colspan="4" style="text-align: center; padding: 8px;">No announcements available.</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock content %}

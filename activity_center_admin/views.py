@@ -11,6 +11,10 @@ from events.models import Event  # Ensure you have an Event model in events/mode
 from clubs.models import Announcement  # ✅ Correct import
 from events.forms import EventForm
 
+def club_view(request, club_id):
+    club = get_object_or_404(Club, id=club_id)
+    return render(request, 'activity_center_admin/club_view.html', {'club': club})
+
 # --- Dashboard ---
 # @method_decorator([login_required, role_required('Activity Center Admin')], name='dispatch')
 class DashboardView(TemplateView):

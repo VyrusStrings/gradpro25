@@ -1,27 +1,80 @@
+{% extends "dashboard.html" %}
 {% load static %}
+{% block content %}
+<style>
+  .meeting-form-container {
+    max-width: 600px;
+    margin: 20px auto;
+    background-color: #f9fafb;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  .meeting-form-container h2 {
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  .meeting-form-container form {
+    margin-bottom: 20px;
+  }
+  .meeting-form-container form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+  .meeting-form-container form input,
+  .meeting-form-container form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    box-sizing: border-box;
+  }
 
+  .submit-btn {
+    background-color: #3B82F6;
+    color: #fff;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  .submit-btn:hover {
+    background-color: #2563EB;
+  }
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Schedule Meeting for Activity</title>
-  <link rel="stylesheet" href="{% static 'css/admin.css' %}">
-</head>
-<body>
-  <header>
-    <h1>Schedule Meeting for "{{ activity.title }}"</h1>
-  </header>
-  <main>
-    <form method="post">
-      {% csrf_token %}
-      <label for="date_time">Meeting Date & Time:</label>
-      <input type="datetime-local" name="date_time" required><br>
-      <label for="agenda">Agenda:</label>
-      <textarea name="agenda" required></textarea><br>
-      <button type="submit">Schedule Meeting</button>
-    </form>
-    <a href="{% url 'activity_center_admin:activity_list' %}">Cancel</a>
-  </main>
-</body>
-</html>
+  .cancel-btn {
+    margin-left: 10px;
+    text-decoration: none;
+    background-color: #e5e7eb;
+    color: #333;
+    padding: 10px 16px;
+    border-radius: 4px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+  }
+  .cancel-btn:hover {
+    background-color: #d1d5db;
+  }
+</style>
+
+<div class="meeting-form-container">
+  <h2>Schedule Meeting for "{{ activity.title }}"</h2>
+  <form method="post">
+    {% csrf_token %}
+    <label for="date_time">Meeting Date &amp; Time:</label>
+    <input type="datetime-local" name="date_time" id="date_time" required>
+    
+    <label for="agenda">Agenda:</label>
+    <textarea name="agenda" id="agenda" required></textarea>
+    
+    <button type="submit" class="submit-btn">Schedule Meeting</button>
+    <a href="{% url 'activity_center_admin:activity_list' %}" class="cancel-btn">Cancel</a>
+  </form>
+</div>
+{% endblock content %}

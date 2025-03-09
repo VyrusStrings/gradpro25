@@ -1,50 +1,116 @@
+{% extends "dashboard.html" %}
 {% load static %}
+{% block content %}
+<style>
+  .club-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Manage Clubs</title>
-  <link rel="stylesheet" href="{% static 'css/admin.css' %}">
-</head>
-<body>
-  <header>
-    <h1>Clubs</h1>
-    <nav>
-      <a href="{% url 'activity_center_admin:dashboard' %}">Dashboard</a> |
-      <a href="{% url 'activity_center_admin:club_create' %}">Add New Club</a>
-    </nav>
-  </header>
-  <main>
-    <ul>
-       
+  .club-table th {
+    background-color: #3B82F6; /* Blue header */
+    color: #ffffff;
+    padding: 10px;
+    text-align: left;
+  }
 
- {% for club in clubs %}
- <tr class="border hover:bg-gray-100 transition">
-     <td class="border p-3 font-semibold">{{ club.name }}</td>
-     <td class="border p-3 text-gray-600">{{ club.description }}</td>
-     <td class="border p-3 text-gray-600">{{ club.quota }}</td>
-     <td class="border p-3 text-gray-600">{{ club.leader|default:"Not confirmed" }}</td>
-     <td class="border p-3 text-gray-600">{{ club.members.count }}</td>
-     <td class="border p-3 text-gray-600">{{ club.events.count }}</td>
-     <td class="border p-3 flex justify-center space-x-3">
-         <a href="{% url 'activity_center_admin:club_update' club.id %}" class="text-yellow-500 hover:underline">
-             <i class="fa-solid fa-edit"></i> Edit
-         </a>
-         <a href="{% url 'activity_center_admin:club_delete' club.id %}" class="text-red-500 hover:underline">
-             <i class="fa-solid fa-trash"></i> Delete
-         </a>
-     </td>
- </tr>
- {% empty %}
- <tr>
-     <td colspan="7" class="text-center p-4 text-gray-500">No clubs available</td>
- </tr>
- {% endfor %}
-    </ul>
-  </main>
-  <footer>
-    <p>&copy; {{ now|date:"Y" }} Your Organization Name</p>
-  </footer>
-</body>
-</html>
+  .club-table td {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+  }
+
+  /* Button styling for Edit, Delete, and View actions */
+  .action-btn {
+    display: inline-block;
+    text-decoration: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 14px;
+    margin-right: 5px;
+  }
+
+  .view-btn {
+    background-color: #FBBF24;
+  }
+  .view-btn:hover {
+    background-color: #F59E0B;
+  }
+
+  .edit-btn {
+    background-color: #34D399;
+  }
+  .edit-btn:hover {
+    background-color: #059669;
+  }
+
+  .delete-btn {
+    background-color: #EF4444;
+  }
+  .delete-btn:hover {
+    background-color: #DC2626;
+  }
+
+  .club-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1em;
+  }
+
+  .add-club-btn {
+    background-color: #3B82F6;
+    color: #ffffff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  .add-club-btn:hover {
+    background-color: #2563EB;
+  }
+</style>
+
+<div class="club-header">
+  <h2>Manage Clubs</h2>
+  <form action="{% url 'activity_center_admin:club_create' %}" method="get" style="margin:0;">
+    <button type="submit" class="add-club-btn">+ Add New Club</button>
+  </form>
+</div>
+
+<table class="club-table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Quota</th>
+      <th>Leader</th>
+      <th>Members</th>
+      <th>Events</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for club in clubs %}
+      <tr>
+        <td>{{ club.name }}</td>
+        <td>{{ club.description }}</td>
+        <td>{{ club.quota }}</td>
+        <td>{{ club.leader|default:"Not confirmed" }}</td>
+        <td>{{ club.members.count }}</td>
+        <td>{{ club.events.count }}</td>
+        <td>
+          <a href="{% url 'activity_center_admin:club_view' club.id %}" class="action-btn view-btn">View</a>
+          <a href="{% url 'activity_center_admin:club_update' club.id %}" class="action-btn edit-btn">Edit</a>
+          <a href="{% url 'activity_center_admin:club_delete' club.id %}" class="action-btn delete-btn">Delete</a>
+        </td>
+      </tr>
+    {% empty %}
+      <tr>
+        <td colspan="7" style="text-align: center; padding: 8px;">No clubs available</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock content %}

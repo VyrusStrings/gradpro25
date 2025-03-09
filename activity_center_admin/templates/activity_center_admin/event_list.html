@@ -1,34 +1,104 @@
+{% extends "dashboard.html" %}
 {% load static %}
+{% block content %}
+<style>
+  .club-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
 
+  .club-table th {
+    background-color: #3B82F6;
+    color: #ffffff;
+    padding: 10px;
+    text-align: left;
+  }
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Manage Events</title>
-  <link rel="stylesheet" href="{% static 'css/admin.css' %}">
-</head>
-<body>
-  <header>
-    <h1>Events</h1>
-    <nav>
-      <a href="{% url 'activity_center_admin:dashboard' %}">Dashboard</a> |
-      <a href="{% url 'activity_center_admin:event_create' %}">Add New Event</a>
-    </nav>
-  </header>
-  <main>
-    <ul>
-      {% for event in events %}
-        <li>
-          {{ event.title }} - {{ event.description }} on {{ event.event_date|date:"Y-m-d H:i" }} (Club: {{ event.club.name }})
-          <a href="{% url 'activity_center_admin:event_update' event.id %}">Edit</a> |
-          <a href="{% url 'activity_center_admin:event_delete' event.id %}">Delete</a>
-        </li>
-      {% empty %}
-        <li>No events available.</li>
-      {% endfor %}
-    </ul>
-  </main>
-</body>
-</html>
+  .club-table td {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+  }
 
+  .action-btn {
+    display: inline-block;
+    text-decoration: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 14px;
+    margin-right: 5px;
+  }
+
+  .edit-btn {
+    background-color: #34D399;
+  }
+  .edit-btn:hover {
+    background-color: #059669;
+  }
+
+  .delete-btn {
+    background-color: #EF4444;
+  }
+  .delete-btn:hover {
+    background-color: #DC2626;
+  }
+
+  .club-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1em;
+  }
+
+  .add-club-btn {
+    background-color: #3B82F6;
+    color: #ffffff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  .add-club-btn:hover {
+    background-color: #2563EB;
+  }
+</style>
+
+<div class="club-header">
+  <h2>Manage Events</h2>
+  <form action="{% url 'activity_center_admin:event_create' %}" method="get" style="margin:0;">
+    <button type="submit" class="add-club-btn">+ Add New Event</button>
+  </form>
+</div>
+
+<table class="club-table">
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Description</th>
+      <th>Date</th>
+      <th>Club</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for event in events %}
+      <tr>
+        <td>{{ event.title }}</td>
+        <td>{{ event.description }}</td>
+        <td>{{ event.date|date:"Y-m-d H:i" }}</td>
+        <td>{{ event.club.name }}</td>
+        <td>
+          <a href="{% url 'activity_center_admin:event_view' event.id %}" class="action-btn view-btn">View</a>
+          <a href="{% url 'activity_center_admin:event_update' event.id %}" class="action-btn edit-btn">Edit</a>
+          <a href="{% url 'activity_center_admin:event_delete' event.id %}" class="action-btn delete-btn">Delete</a>
+        </td>
+      </tr>
+    {% empty %}
+      <tr>
+        <td colspan="5" style="text-align: center; padding: 8px;">No events available.</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock content %}

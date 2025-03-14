@@ -1,63 +1,20 @@
-{% extends "dashboard.html" %}
+{% extends "activity_center_admin/base.html" %}
 {% load static %}
 {% block content %}
 <style>
-  .club-table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-
-  .club-table th {
-    background-color: #3B82F6; /* Blue header */
-    color: #ffffff;
-    padding: 10px;
-    text-align: left;
-  }
-
-  .club-table td {
-    padding: 10px;
-    border-bottom: 1px solid #ccc;
-  }
-
-  /* Button styling for Edit, Delete, and View actions */
-  .action-btn {
-    display: inline-block;
-    text-decoration: none;
-    padding: 6px 12px;
-    border-radius: 4px;
-    color: #fff;
-    font-size: 14px;
-    margin-right: 5px;
-  }
-
-  .view-btn {
-    background-color: #FBBF24;
-  }
-  .view-btn:hover {
-    background-color: #F59E0B;
-  }
-
-  .edit-btn {
-    background-color: #34D399;
-  }
-  .edit-btn:hover {
-    background-color: #059669;
-  }
-
-  .delete-btn {
-    background-color: #EF4444;
-  }
-  .delete-btn:hover {
-    background-color: #DC2626;
-  }
-
+  /* Header and Search Bar */
   .club-header {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1em;
   }
-
+  .club-header h2 {
+    margin: 0;
+    font-size: 24px;
+    color: #333;
+  }
   .add-club-btn {
     background-color: #3B82F6;
     color: #ffffff;
@@ -70,47 +27,134 @@
   .add-club-btn:hover {
     background-color: #2563EB;
   }
+
+  .search-bar {
+    width: 100%;
+    text-align: center;
+    margin: 10px 0;
+  }
+  .search-bar input[type="text"] {
+    padding: 8px;
+    width: 250px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  .search-bar button {
+    padding: 8px 12px;
+    background-color: #3B82F6;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 5px;
+  }
+  .search-bar button:hover {
+    background-color: #2563EB;
+  }
+
+  /* Cards Container */
+  .cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  /* Card Layout */
+  .club-card {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    width: calc(33.333% - 20px);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    position: relative;
+    transition: transform 0.2s ease;
+    overflow: hidden; /* So the image corners match the card radius */
+    display: flex;
+    flex-direction: column; /* image on top, text below */
+  }
+  .club-card:hover {
+    transform: scale(1.02);
+  }
+  @media (max-width: 800px) {
+    .club-card {
+      width: calc(50% - 20px);
+    }
+  }
+  @media (max-width: 500px) {
+    .club-card {
+      width: 100%;
+    }
+  }
+
+  /* Image Section */
+  .club-card-image {
+    width: 100%;
+    height: 180px; /* fixed height for a uniform look */
+    background-color: #eee;
+    overflow: hidden;
+  }
+  .club-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* ensures the image covers the entire area */
+  }
+
+  /* Card Body Section */
+  .club-card-body {
+    padding: 15px;
+  }
+  .club-card-body h3 {
+    margin: 0 0 8px;
+    color: #333;
+    font-size: 18px;
+  }
+  .club-card-body p {
+    margin: 5px 0;
+    color: #555;
+    font-size: 14px;
+  }
 </style>
 
 <div class="club-header">
   <h2>Manage Clubs</h2>
-  <form action="{% url 'activity_center_admin:club_create' %}" method="get" style="margin:0;">
-    <button type="submit" class="add-club-btn">+ Add New Club</button>
+  <div>
+    <form action="{% url 'activity_center_admin:club_create' %}" method="get" style="display:inline-block; margin-right: 10px;">
+      <button type="submit" class="add-club-btn">+ Add New Club</button>
+    </form>
+  </div>
+</div>
+
+<div class="search-bar">
+  <form method="get" action="{% url 'activity_center_admin:club_list' %}" style="display: inline-block;">
+    <input type="text" name="q" placeholder="Search for a club..." value="{{ request.GET.q }}">
+    <button type="submit">Search</button>
   </form>
 </div>
 
-<table class="club-table">
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Description</th>
-      <th>Quota</th>
-      <th>Leader</th>
-      <th>Members</th>
-      <th>Events</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for club in clubs %}
-      <tr>
-        <td>{{ club.name }}</td>
-        <td>{{ club.description }}</td>
-        <td>{{ club.quota }}</td>
-        <td>{{ club.leader|default:"Not confirmed" }}</td>
-        <td>{{ club.members.count }}</td>
-        <td>{{ club.events.count }}</td>
-        <td>
-          <a href="{% url 'activity_center_admin:club_view' club.id %}" class="action-btn view-btn">View</a>
-          <a href="{% url 'activity_center_admin:club_update' club.id %}" class="action-btn edit-btn">Edit</a>
-          <a href="{% url 'activity_center_admin:club_delete' club.id %}" class="action-btn delete-btn">Delete</a>
-        </td>
-      </tr>
-    {% empty %}
-      <tr>
-        <td colspan="7" style="text-align: center; padding: 8px;">No clubs available</td>
-      </tr>
-    {% endfor %}
-  </tbody>
-</table>
+<div class="cards-container">
+  {% for club in clubs %}
+    <div class="club-card" onclick="window.location='{% url 'activity_center_admin:club_view' club.id %}';">
+      <!-- Top Image Section -->
+      <div class="club-card-image">
+        {% if club.image %}
+          <img src="{{ club.image.url }}" alt="{{ club.name }} Image">
+        {% else %}
+          <img src="{% static 'default_club_image.jpg' %}" alt="Default Club Image">
+        {% endif %}
+      </div>
+      <!-- Text Section -->
+      <div class="club-card-body">
+        <h3>{{ club.name }}</h3>
+        <p><strong>Description:</strong> {{ club.description }}</p>
+        <p><strong>Quota:</strong> {{ club.quota }}</p>
+        <p><strong>Leader:</strong> {{ club.leader|default:"Not confirmed" }}</p>
+        <p><strong>Members:</strong> {{ club.members.count }}</p>
+        <p><strong>Events:</strong> {{ club.events.count }}</p>
+      </div>
+    </div>
+  {% empty %}
+    <p style="text-align:center; width:100%;">No clubs available.</p>
+  {% endfor %}
+</div>
 {% endblock content %}

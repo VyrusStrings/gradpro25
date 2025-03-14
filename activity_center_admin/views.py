@@ -15,6 +15,19 @@ def club_view(request, club_id):
     club = get_object_or_404(Club, id=club_id)
     return render(request, 'activity_center_admin/club_view.html', {'club': club})
 
+def activity_list(request):
+    pending_activities = ClubActivity.objects.filter(status='Pending')
+    upcoming_activities = ClubActivity.objects.filter(status='Approved')  # or date-based logic
+
+    return render(request, 'activity_center_admin/activity_list.html', {
+        'pending_activities': pending_activities,
+        'upcoming_activities': upcoming_activities,
+    })
+
+def review_activity(request):
+    # If you need to pass data to the template, do it here
+    return render(request, 'activity_center_admin/review_activity.html')
+
 # --- Dashboard ---
 # @method_decorator([login_required, role_required('Activity Center Admin')], name='dispatch')
 class DashboardView(TemplateView):

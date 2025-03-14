@@ -1,0 +1,122 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Club Management System</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+ 
+  <link rel="stylesheet" href="https://cdn.tailwindcss.com">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
+</head>
+
+<body>
+
+  <!-- Container -->
+  <div class="container">
+    <!-- SIDEBAR DIV -->
+    <div class="sidebar-div">
+      <aside>
+        <div class="top">
+          <div class="logo">
+            <img src="{% static 'emu.png'%}" alt="">
+            <h2>EMU <span class="primary">A.CENTER</span></h2>
+          </div>
+          <div class="close" id="close-btn">
+            <span class="material-icons-sharp">close</span>
+          </div>
+        </div>
+
+        <div class="sidebar">
+          <a href="{% url 'activity_center_admin:dashboard' %}">
+            <span class="material-icons-sharp">grid_view</span>
+            <h3>Activity Center Admin Dashboard</h3>
+          </a>
+          <a href="{% url 'users:profile' %}">
+            <span class="material-icons-sharp">person</span>
+            <h3>Profile</h3>
+          </a>
+         
+          <a href="{% url 'activity_center_admin:club_list' %}">
+            <span class="material-icons-sharp">event_available</span>
+            <h3>Clubs</h3>
+          </a>
+          <a href="{% url 'activity_center_admin:event_list' %}">
+            <span class="material-icons-sharp">folder_open</span>
+            <h3>Events</h3>
+          </a>
+          <a href="{% url 'activity_center_admin:activity_list' %}">
+            <span class="material-icons-sharp">how_to_reg</span>
+
+            <h3>Activities</h3>
+          </a>
+         
+          <a href="{% url 'activity_center_admin:announcement_list' %}">
+            <span class="material-icons-sharp">campaign</span>
+            <h3>Announcements</h3>
+          </a>
+          
+          
+
+          <a href="{% url 'account_logout' %}">
+            <span class="material-icons-sharp">logout</span>
+            <h3>Logout</h3>
+          </a>
+        </div>
+      </aside>
+    </div>
+
+    <!-- MIDDLE DIV -->
+    <div class="middle-div">
+
+      <!-- NAVBAR DIV -->
+      <div class="navbar-div">
+
+        <div class="nav-dashboard-div">
+          <div class="nav-dashboard-button">
+            <button id="menu-btn">
+              <span class="material-icons-sharp">menu</span>
+            </button>
+          </div>
+          <div class="nav-dashboard-title">
+            <h1>Dashboard</h1>
+          </div>
+        </div>
+
+        <div class="nav-left-div">
+          <div class="theme-toggler">
+            <span class="material-icons-sharp active">light_mode</span>
+            <span class="material-icons-sharp">dark_mode</span>
+          </div>
+
+
+          <div class="profile">
+            <div class="info">
+              <p>Welcome <b>{{ user.name }} !</b></p>
+              <!-- <h3>Welcome <b>Bamlak!</b></h3> -->
+              <small class="text-muted">Admin</small>
+            </div>
+            <div class="profile-photo">
+              <!-- <img src="{% static 'emu.png'%}" alt=""> -->
+              <img src="{{ user.profile_picture.url }}" alt="Profile Picture">
+<!-- BAMLOUKA YOU NEED TO FIX THE SIZING BECAUSE WHEN I UNCOMMENTED IT IT WAS A SCROLLBAR -->
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- CONTENT DIV -->
+      <div class="content-div">
+        {% block content %}
+
+        {% endblock content %}
+      </div>
+    </div>
+  </div>
+  </div>
+  <script src="{% static 'js/script.js' %}"></script>
+</body>
+
+</html>

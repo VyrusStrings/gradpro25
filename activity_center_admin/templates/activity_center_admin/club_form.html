@@ -19,7 +19,6 @@
     color: #333;
   }
 
-  /* Form styling */
   .club-form-container form {
     margin-bottom: 20px;
   }
@@ -39,7 +38,6 @@
     font-size: 14px;
   }
 
-  /* Submit button (blue) */
   .submit-btn {
     background-color: #3B82F6;
     color: #ffffff;
@@ -77,7 +75,7 @@
     {% endif %}
   </h2>
 
-  <form method="post">
+  <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit" class="submit-btn">

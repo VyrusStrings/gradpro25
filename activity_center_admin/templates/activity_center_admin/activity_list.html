@@ -1,103 +1,82 @@
-{% extends "dashboard.html" %}
+{% extends "activity_center_admin/base.html" %}
 {% load static %}
 {% block content %}
 <style>
-  .activity-table {
-    width: 100%;
-    border-collapse: collapse;
+  .upcoming-card {
+    max-width: 800px;
+    margin: 20px auto;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
   }
-  
-  .activity-table th {
-    background-color: #3B82F6;
-    color: #ffffff;
-    padding: 10px;
-    text-align: left;
+  .upcoming-card h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 15px;
   }
-  
-  .activity-table td {
-    padding: 10px;
-    border-bottom: 1px solid #ccc;
-  }
-  
-  .action-btn {
-    display: inline-block;
-    text-decoration: none;
-    padding: 6px 12px;
-    border-radius: 4px;
-    color: #fff;
-    font-size: 14px;
-    margin-right: 5px;
-  }
-  
-  .approve-btn {
-    background-color: #34D399;
-  }
-  .approve-btn:hover {
-    background-color: #059669;
-  }
-  
-  .reject-btn {
-    background-color: #EF4444;
-  }
-  .reject-btn:hover {
-    background-color: #DC2626;
-  }
-  
-  .schedule-btn {
-    background-color: #FBBF24;
-  }
-  .schedule-btn:hover {
-    background-color: #F59E0B;
-  }
-  
-  .activity-header {
+  .activities-container {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1em;
+    flex-direction: column;
+    gap: 10px;
   }
-  
-  .activity-header h2 {
-    margin: 0;
+  .activity-item {
+    background-color: #f9fafb;
+    border: 1px solid #eee;
+    border-radius: 6px;
+    padding: 10px;
   }
-  
-  .activity-header nav a {
-    text-decoration: none;
-    color: #3B82F6;
+  .activity-item h3 {
+    margin: 0 0 5px;
+    font-size: 16px;
+    color: #333;
+  }
+  .activity-item p {
+    margin: 2px 0;
     font-size: 14px;
+    color: #555;
+  }
+  .no-activities {
+    text-align: center;
+    padding: 10px;
+    font-size: 14px;
+    color: #777;
+  }
+  .review-button-container {
+    text-align: center;
+    margin: 20px auto;
+    max-width: 800px;
+  }
+  .review-btn {
+    background-color: #3B82F6;
+    color: #fff;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    text-decoration: none;
+  }
+  .review-btn:hover {
+    background-color: #2563EB;
   }
 </style>
-
-<div class="activity-header">
-  <h2>Club Activities</h2>
+<div class="review-button-container">
+  <a href="{% url 'activity_center_admin:activity_review' %}" class="review-btn">Review Activities</a>
 </div>
 
-<table class="activity-table">
-  <thead>
-    <tr>
-      <th>Title</th>
-      <th>Club</th>
-      <th>Status</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for activity in activities %}
-      <tr>
-        <td>{{ activity.title }}</td>
-        <td>{{ activity.club.name }}</td>
-        <td>{{ activity.status }}</td>
-        <td>
-          <a href="{% url 'activity_center_admin:activity_approve' activity.id %}" class="action-btn approve-btn">Approve</a>
-          <a href="{% url 'activity_center_admin:activity_reject' activity.id %}" class="action-btn reject-btn">Reject</a>
-          <a href="{% url 'activity_center_admin:schedule_meeting' activity.id %}" class="action-btn schedule-btn">Schedule Meeting</a>
-        </td>
-      </tr>
+<div class="upcoming-card">
+  <h2>Upcoming Activities</h2>
+  <div class="activities-container">
+    {% for activity in upcoming_activities %}
+      <div class="activity-item">
+        <h3>{{ activity.title }}</h3>
+        <p><strong>Club:</strong> {{ activity.club.name }}</p>
+        <p><strong>Status:</strong> {{ activity.status }}</p>
+      </div>
     {% empty %}
-      <tr>
-        <td colspan="4" style="text-align: center; padding: 8px;">No activities available.</td>
-      </tr>
+      <div class="no-activities">No upcoming activities.</div>
     {% endfor %}
-  </tbody>
-</table>
+  </div>
+</div>
 {% endblock content %}

@@ -9,6 +9,14 @@ from clubs.models import Club
 def list_events(request):
     """View all events (temporary - lists all events for testing)"""
     events = Event.objects.all()  # No role check
+    upcoming_events = Event.objects.filter(
+        date__gte=timezone.now()
+    ).order_by('date')[:5]  # Limit to next 5 events, for example
+
+    return render(request, 'activity_center_admin/event_list.html', {
+        'events': events,
+        'upcoming_events': upcoming_events,   
+            })
     return render(request, "events/list_events.html", {"events": events})
 
 @login_required

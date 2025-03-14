@@ -1,4 +1,4 @@
-{% extends "dashboard.html" %}
+{% extends "activity_center_admin/base.html" %}
 {% load static %}
 {% block content %}
 <style>
@@ -10,10 +10,38 @@
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   }
-  .club-view-container h2 {
-    text-align: center;
+  /* New header container for club name and action buttons */
+  .club-view-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: 20px;
+  }
+  .club-view-header h2 {
+    margin: 0;
     color: #333;
+    font-size: 28px;
+  }
+  .action-buttons a {
+    display: inline-block;
+    margin-left: 10px;
+    text-decoration: none;
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+  .edit-btn {
+    background-color: #34D399;
+  }
+  .edit-btn:hover {
+    background-color: #059669;
+  }
+  .delete-btn {
+    background-color: #EF4444;
+  }
+  .delete-btn:hover {
+    background-color: #DC2626;
   }
   .club-details {
     margin-bottom: 20px;
@@ -54,7 +82,14 @@
 </style>
 
 <div class="club-view-container">
-  <h2>{{ club.name }}</h2>
+  <div class="club-view-header">
+    <h2>{{ club.name }}</h2>
+    <div class="action-buttons">
+      <a href="{% url 'activity_center_admin:club_update' club.id %}" class="edit-btn">Edit</a>
+      <a href="{% url 'activity_center_admin:club_delete' club.id %}" class="delete-btn">Delete</a>
+    </div>
+  </div>
+
   <div class="club-details">
     <p><strong>Description:</strong> {{ club.description }}</p>
     <p><strong>Quota:</strong> {{ club.quota }}</p>

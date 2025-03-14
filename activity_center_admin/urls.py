@@ -25,6 +25,7 @@ urlpatterns = [
     path('activities/<int:activity_id>/approve/', views.activity_approve, name='activity_approve'),
     path('activities/<int:activity_id>/reject/', views.activity_reject, name='activity_reject'),
     path('activities/<int:activity_id>/schedule-meeting/', views.schedule_meeting, name='schedule_meeting'),
+    path('activities/review/', views.review_activity, name='activity_review'),
     
     # Announcements Actions
     path('announcements/', views.AnnouncementListView.as_view(), name='announcement_list'),

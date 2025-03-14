@@ -5,6 +5,7 @@ class Club(models.Model):
     id = models.AutoField(primary_key=True)  # Add ID as primary key
     name = models.CharField(max_length=255)
     description = models.TextField()
+    image = models.ImageField(upload_to='club_images/', blank=True, null=True)
     quota = models.PositiveIntegerField(default=0)  # Add quota field
     leader = models.OneToOneField(
         "users.ClubLeader",
@@ -55,14 +56,21 @@ class Meeting(models.Model):
 
 
 class Announcement(models.Model):
+    STATUS_CHOICES = [
+        ('Pending', 'Pending'),
+        ('Approved', 'Approved'),
+        ('Rejected', 'Rejected'),
+    ]
+
     club = models.ForeignKey(Club, on_delete=models.CASCADE, related_name='announcements')
     title = models.CharField(max_length=255)
     content = models.TextField()
-    visible = models.BooleanField(default=True)  # ✅ Visibility toggle (default: visible to members)
+    visible = models.BooleanField(default=True)  # Visibility toggle (default: visible to members)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Pending')
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.title} ({'Visible' if self.visible else 'Hidden'})"
+        return f"{self.title} ({'Visible' if self.visible else 'Hidden'}, {self.status})"
 
 
 class ClubDocument(models.Model):

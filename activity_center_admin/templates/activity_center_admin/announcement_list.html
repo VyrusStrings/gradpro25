@@ -1,73 +1,107 @@
-{% extends "dashboard.html" %}
+{% extends "activity_center_admin/base.html" %}
 {% load static %}
 {% block content %}
 <style>
-  .announcement-table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-
-  .announcement-table th {
-    background-color: #3B82F6;
-    color: #ffffff;
-    padding: 10px;
-    text-align: left;
-  }
-  .announcement-table td {
-    padding: 10px;
-    border-bottom: 1px solid #ccc;
-  }
-
   .announcement-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1em;
   }
-  
   .announcement-header h2 {
     margin: 0;
   }
-  
   .announcement-header nav a {
     text-decoration: none;
     color: #3B82F6;
     font-size: 14px;
   }
-</style>
 
+  .announcements-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 800px;
+    margin: 20px auto;
+  }
+
+  .announcement-item {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+  .announcement-item h3 {
+    margin-top: 0;
+    margin-bottom: 8px;
+    color: #333;
+    font-size: 18px;
+  }
+  .announcement-item p {
+    margin: 5px 0;
+    font-size: 14px;
+    color: #555;
+  }
+
+  .announcement-actions {
+    margin-top: 10px;
+  }
+
+  .action-btn {
+    display: inline-block;
+    text-decoration: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 14px;
+    margin-right: 5px;
+  }
+  .approve-btn {
+    background-color: #34D399;
+  }
+  .approve-btn:hover {
+    background-color: #059669;
+  }
+  .reject-btn {
+    background-color: #EF4444;
+  }
+  .reject-btn:hover {
+    background-color: #DC2626;
+  }
+
+  .no-announcements {
+    text-align: center;
+    font-size: 14px;
+    color: #777;
+  }
+</style>
 <div class="announcement-header">
   <h2>Review Announcements</h2>
-  <nav>
-    <a href="{% url 'activity_center_admin:dashboard' %}">Dashboard</a>
-  </nav>
 </div>
 
-<table class="announcement-table">
-  <thead>
-    <tr>
-      <th>Title</th>
-      <th>Club</th>
-      <th>Status</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for announcement in announcements %}
-      <tr>
-        <td>{{ announcement.title }}</td>
-        <td>{{ announcement.club.name }}</td>
-        <td>{{ announcement.status }}</td>
-        <td>
-          <a href="{% url 'activity_center_admin:announcement_approve' announcement.id %}" class="action-btn approve-btn">Approve</a>
-          <a href="{% url 'activity_center_admin:announcement_reject' announcement.id %}" class="action-btn reject-btn">Reject</a>
-        </td>
-      </tr>
-    {% empty %}
-      <tr>
-        <td colspan="4" style="text-align: center; padding: 8px;">No announcements available.</td>
-      </tr>
-    {% endfor %}
-  </tbody>
-</table>
+<div class="announcements-container">
+  {% for announcement in announcements %}
+    <div class="announcement-item">
+      <h3>{{ announcement.title }}</h3>
+      <p><strong>Club:</strong> {{ announcement.club.name }}</p>
+      <p><strong>Status:</strong> {{ announcement.status }}</p>
+
+      <div class="announcement-actions">
+        <a href="{% url 'activity_center_admin:announcement_approve' announcement.id %}"
+           class="action-btn approve-btn">
+          Approve
+        </a>
+        <a href="{% url 'activity_center_admin:announcement_reject' announcement.id %}"
+           class="action-btn reject-btn">
+          Reject
+        </a>
+      </div>
+    </div>
+  {% empty %}
+    <div class="no-announcements">
+      No announcements available.
+    </div>
+  {% endfor %}
+</div>
 {% endblock content %}
